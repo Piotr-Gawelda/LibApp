@@ -15,5 +15,25 @@ namespace LibApp.Controllers
 
             return View(firstBook);
         }
+
+        public IActionResult Edit(int bookId)
+        {
+            return Content("id" + bookId);
+        }
+
+        public IActionResult Index(int? pageIndex, string sortBy)
+        {
+            if (!pageIndex.HasValue)
+            {
+                pageIndex = 1;
+            }
+
+            if (String.IsNullOrEmpty(sortBy))
+            {
+                sortBy = "Name";
+            }
+
+            return Content($"pageindex={pageIndex}&sortBy={sortBy}");
+        }
     }
 }
