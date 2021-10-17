@@ -12,8 +12,12 @@ namespace LibApp.Controllers
         public IActionResult Random()
         {
             var firstBook = new Book() { Name = "English dictionary" };
+            var secBook = new Book() { Name = "German dictionary" };
 
-            return View(firstBook);
+            ViewBag.Book1 = firstBook;
+            ViewData["Book2"] = secBook;
+
+            return View();
         }
 
         public IActionResult Edit(int bookId)
