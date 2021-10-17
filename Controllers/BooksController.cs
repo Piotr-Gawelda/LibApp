@@ -36,6 +36,7 @@ namespace LibApp.Controllers
             return Content($"pageindex={pageIndex}&sortBy={sortBy}");
         }
 
+        [Route("books/released/{year:regex(^\\d{{4}}$):min(1925):max(2021)}/{month:range(1,12)}")]
         public IActionResult ByReleaseData(int year, int month)
         {
             return Content(year + "/" + month);
