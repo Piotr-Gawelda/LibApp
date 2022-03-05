@@ -9,37 +9,38 @@
     <a class="btn btn-primary" asp-action="New">New Customer</a>
 </p>
 
+
 <table id="customers" class="table table-hover">
     <thead>
-    <tr>
-        <th>Customer</th>
-        <th>Discount Rate</th>
-        <th>Delete</th>
-    </tr>
+        <tr>
+            <th>Customer</th>
+            <th>Membership Type</th>
+            <th>Delete</th>
+        </tr>
     </thead>
     <tbody>
-       
     </tbody>
 </table>
 
-@section Scripts 
+
+@section Scripts
 {
     <script>
         $(document).ready(function () {
             $("#customers").DataTable({
                 ajax: {
-                    url: "api/customers",
+                    url: "/api/customers/",
                     dataSrc: ""
                 },
                 columns: [
                     {
                         data: "name",
                         render: function (data, type, customer) {
-                            return "<a href='customers/edit/" + customer.id + "'>" + customer.name + "</a>";
+                            return "<a href='customers/details/" + customer.id + "'>" + customer.name + "</a>";
                         }
                     },
                     {
-                        data: "membershipType.discountRate"
+                        data: "membershipType.name"
                     },
                     {
                         data: "id",
@@ -51,35 +52,43 @@
             });
         });
     </script>
-
     <script>
         $(document).ready(function () {
             var table = $("#customers").DataTable();
             $("#customers").on("click", ".js-delete", function () {
                 var button = $(this);
-                bootbox.confirm({
-                    title: "Delete user",
-                    message: "Confirm customer deletion?",
-                    buttons: {
-                        cancel: {
-                            label: '<i class="fa fa-times"></i> Cancel'
+                if (this.User.IsInRole("Owner")) {
+                    bootbox.confirm({
+                        message: "Confirm customer deletion?",
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-success'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-danger'
+                            }
                         },
-                        confirm: {
-                            label: '<i class="fa fa-check"></i> Confirm'
+                        callback: function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/customers/" + button.attr("data-customer-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        table.row(button.parents("tr")).remove().draw();
+                                    }
+                                });
+                            }
                         }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            $.ajax({
-                                url: "api/customers/" + button.attr("data-customer-id"),
-                                method: "DELETE",
-                                success: function () {
-                                    table.row(button.parents("tr")).remove().draw();
-                                }
-                            });
-                        }
-                    }
-                });
+                    });
+                }
+                else {
+                    bootbox.alert({
+                        message: "This Actions is not allowed",
+                        size: 'small'
+                    });
+                }
             });
         });
     </script>
