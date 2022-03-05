@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using LibApp.Models;
+using System;
+
 namespace LibApp.Interfaces
 {
     public interface IBookRepository
@@ -10,5 +13,6 @@ namespace LibApp.Interfaces
         void DeleteBook(int id);
         void UpdateBook(Book book);
         void Save();
+        Task GetByIdAsync(int id);
     }
 }
