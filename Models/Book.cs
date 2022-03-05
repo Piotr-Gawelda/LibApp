@@ -18,8 +18,12 @@ namespace LibApp.Models
 		public Genre Genre { get; set; }
 		public byte GenreId { get; set; }
 		public DateTime DateAdded { get; set; }
+		[Required(ErrorMessage = "ReleaseDate is required")]
 		public DateTime ReleaseDate { get; set; }
+		[Required]
+		[Range(1, 20, ErrorMessage = "Number in stock must be between 1 and 20")]
 		public int NumberInStock { get; set; }
+		[Required]
 		public int NumberAvailable { get; set; }
 	}
       
